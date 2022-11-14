@@ -13,7 +13,12 @@ public class Evento implements Serializable {
     private Long id;
     @Column(name = "titulo")
     private String titulo;
+
     private String descripcion;
+
+    @Column(name = "max_persons")
+    private Integer maxNumOfPersons;
+
 
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)

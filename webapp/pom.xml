@@ -10,6 +10,9 @@
     <name>web-app</name>
     <version>0.0.1-SNAPSHOT</version>
     <url>http://maven.apache.org</url>
+    <properties>
+        <mainClass>JoinmyApplication</mainClass>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -44,15 +47,21 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>3.1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-        <finalName>web-app</finalName>
+
     </build>
 </project>

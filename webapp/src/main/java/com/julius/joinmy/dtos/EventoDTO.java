@@ -1,13 +1,22 @@
 package com.julius.joinmy.dtos;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 public class EventoDTO {
 
     private Long id;
+    @NotBlank
     private String titulo;
+    @NotBlank
     private String descripcion;
+
     private Date createAt;
+    //@DateTimeFormat(pattern = "MM-dd-yyyy' at' HH:mm:ss")
     private Date date;
+
+    //@DateTimeFormat(pattern = "MM-dd-yyyy' at' HH:mm:ss")
     private Date dateFinal;
 
     public Long getId() {

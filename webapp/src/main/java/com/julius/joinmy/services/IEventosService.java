@@ -1,12 +1,17 @@
 package com.julius.joinmy.services;
 
-import com.julius.joinmy.models.entity.Evento;
+import com.julius.joinmy.dtos.EventoDTO;
+import com.julius.joinmy.helpers.PageRender;
 
 import java.util.List;
 
 public interface IEventosService {
-    List<Evento> findAll();
+    List<EventoDTO> findAll();
 
-    void save(Evento evento);
+    PageRender<EventoDTO> findAll(Integer page);
+
+    void save(EventoDTO evento);
+
+    EventoDTO findOne(Long id);
 
 }

@@ -1,36 +1,71 @@
 package com.julius.joinmy.controllers;
 
-import com.julius.joinmy.models.entity.Evento;
+import com.julius.joinmy.dtos.EventoDTO;
+import com.julius.joinmy.helpers.ConverterHelper;
 import com.julius.joinmy.services.IEventosService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class EventosController {
 
     private IEventosService eventosService;
 
+    private ModelMapper mapper;
+
     @RequestMapping(method = RequestMethod.GET, path = "eventos")
-    public String getEventos(Model model) {
-        model.addAttribute("eventos", eventosService.findAll());
+    public String getEventos(@RequestParam(defaultValue = "0") int page, Model model) {
+
+        List<EventoDTO> eventosDTOs = (List<EventoDTO>) ConverterHelper.convertList(eventosService.findAll(), EventoDTO.class, mapper);
+        //List<EventoDTO> eventosDTOs = eventosService.findAll().stream().map(evento -> mapper.map(evento, EventoDTO.class)).collect(Collectors.toList());
+
+        model.addAttribute("eventos", eventosDTOs);
         return "eventos";
     }
 
+    @RequestMapping(value = "/evento/{id}")
+    public String editEventoForm(@PathVariable Long id, Model model, RedirectAttributes flash) {
+        EventoDTO eventoDTO;
+        if(id>0) {
+            eventoDTO = eventosService.findOne(id);
+            if(eventoDTO== null){
+                flash.addFlashAttribute("error", "No se encontro el evento");
+                return "redirect:/eventos";
+            }
+        } else {
+            flash.addFlashAttribute("error", "EL id tiene que ser mayor a 0");
+            return "redirect:/eventos";
+        }
+        model.addAttribute("evento", eventoDTO);
+
+        return "eventoForm";
+
+
+    }
+
     @RequestMapping(value = "addEvento")
-    public String addEventoForm(@ModelAttribute Evento evento) {
+    public String addEventoForm(@ModelAttribute("evento") EventoDTO eventoDTO) {
 
         return "eventoForm";
     }
 
     @RequestMapping(value = "addEvento", method = RequestMethod.POST)
-    public String addEvento(@ModelAttribute Evento evento) {
+    public String addEvento(@ModelAttribute("evento") @Valid EventoDTO eventoDTO, BindingResult result, RedirectAttributes flash) {
 
+        if (result.hasErrors()){
+            return "eventoForm";
+        }
 
-        eventosService.save(evento);
+        eventosService.save(eventoDTO);
+        flash.addFlashAttribute("success", "Cliente creado con exito");
         return "redirect:/eventos";
     }
 
@@ -38,4 +73,7 @@ public class EventosController {
     public void setEventosService(IEventosService eventosService) {
         this.eventosService = eventosService;
     }
+
+    @Autowired
+    public void setMapper(ModelMapper modelMapper) { this.mapper = modelMapper;}
 }
