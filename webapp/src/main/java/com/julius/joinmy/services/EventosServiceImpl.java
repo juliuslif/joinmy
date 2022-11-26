@@ -1,6 +1,7 @@
 package com.julius.joinmy.services;
 
 import com.julius.joinmy.dtos.EventoDTO;
+import com.julius.joinmy.dtos.FilterDTO;
 import com.julius.joinmy.helpers.ConverterHelper;
 import com.julius.joinmy.helpers.PageRender;
 import com.julius.joinmy.models.dao.IEventoDao;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,13 +28,29 @@ public class EventosServiceImpl implements IEventosService {
 
     @Override
     public PageRender<EventoDTO> findAll(Integer page) {
-        Pageable pageRequest = PageRequest.of(page, 4);
+        Pageable pageRequest = PageRequest.of(page, 2);
         Page<Evento> pageObject = eventoDao.findAll(pageRequest);
         List<EventoDTO> content = (List<EventoDTO>) ConverterHelper.convertList( pageObject.getContent(), EventoDTO.class, mapper);
-        PageRender<EventoDTO> pageRender= new PageRender<EventoDTO>("", content,pageObject.getNumber(),pageObject.getTotalPages(),pageObject.getNumberOfElements());
 
+        Boolean previusPage = false;
+        Boolean nextPage = false;
+        if(page<pageObject.getTotalPages()-1) {
+            nextPage = true;
+        }
+        if(page >0) {
+            previusPage = true;
+        }
 
+        PageRender<EventoDTO> pageRender= new PageRender<EventoDTO>("", content,page,pageObject.getTotalPages(),pageObject.getNumberOfElements(), previusPage, nextPage);
         return pageRender;
+    }
+
+    @Override
+    public List<EventoDTO> findAllByFilter(FilterDTO filter) {
+        Pageable pageRequest = PageRequest.of(filter.getPagina(), 8);
+        List<Evento> lista = eventoDao.findByTituloLikeIgnoreCaseOrDescripcionLikeIgnoreCase("%" + filter.getBusqueda() + "%", "%" + filter.getBusqueda() + "%" , pageRequest);
+        List<EventoDTO> content = (List<EventoDTO>) ConverterHelper.convertList( lista, EventoDTO.class, mapper);
+        return content;
     }
 
     @Override

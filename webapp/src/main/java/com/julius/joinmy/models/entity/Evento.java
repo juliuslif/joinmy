@@ -3,6 +3,7 @@ package com.julius.joinmy.models.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "Eventos")
@@ -16,7 +17,7 @@ public class Evento implements Serializable {
 
     private String descripcion;
 
-    @Column(name = "max_persons")
+    @Column(name = "max_persons", nullable = false)
     private Integer maxNumOfPersons;
 
 
@@ -31,6 +32,13 @@ public class Evento implements Serializable {
     @Column(name = "date_final")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateFinal;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_user_admin")
+    private Usuario userAdmin;
+
+    @ManyToMany(mappedBy = "eventosSubscriber", fetch = FetchType.LAZY)
+    private List<Usuario> subscriptores;
 
     @PrePersist
     public void prePersist() {
@@ -83,5 +91,29 @@ public class Evento implements Serializable {
 
     public void setDateFinal(Date dateFinal) {
         this.dateFinal = dateFinal;
+    }
+
+    public Integer getMaxNumOfPersons() {
+        return maxNumOfPersons;
+    }
+
+    public void setMaxNumOfPersons(Integer maxNumOfPersons) {
+        this.maxNumOfPersons = maxNumOfPersons;
+    }
+
+    public Usuario getUserAdmin() {
+        return userAdmin;
+    }
+
+    public void setUserAdmin(Usuario userAdmin) {
+        this.userAdmin = userAdmin;
+    }
+
+    public List<Usuario> getSubscriptores() {
+        return subscriptores;
+    }
+
+    public void setSubscriptores(List<Usuario> subscriptores) {
+        this.subscriptores = subscriptores;
     }
 }

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<script type="text/javascript" th:fragment="javascript">
+
+    window.currentPage = 0;
+    window.varlorABuscar = "";
+    function scrollEvent() {
+        if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+            searchPage();
+        }
+    }
+
+    function searchPage() {
+        var direccion = '/eventos/res';
+        $.ajax({
+            beforeSend: function () {
+                //cargando
+            },
+            url: direccion,
+            method: 'get',
+            data: { pagina: window.currentPage, busqueda : window.varlorABuscar },
+            success: function (resp) {
+                if(resp.length ===0) {
+                    $(window).off('scroll');
+                }else {
+                    $(window).scroll(scrollEvent);
+                    $.each(resp, function (ind, elem) {
+                        var adddiv = $("<div><h4>" + elem.titulo + "</h4><p>" +
+                            elem.descripcion + "</p><p>Fecha del Evento: " + elem.date + "</p>" +
+                            "<p>plazas libres : " + (elem.maxNumOfPersons - elem.subscriptores.length) + "</p></div>");
+                        adddiv.click(function () {
+                            window.location = "/evento/" + elem.id;
+                        });
+                        $('#containerEventos').append(adddiv);
+                    });
+                    window.currentPage++;
+                    console.log(window.currentPage);
+                }
+
+            },
+            error: function (jqXHR, estado, error) {
+                console.log(estado);
+                console.log(error);
+            },
+            complete: function (jqXHR, estado) {
+
+            }
+        })
+    }
+    $(document).ready(
+        function () {
+            searchPage("");
+
+            $(window).scroll(function() {
+                scrollEvent;
+            });
+
+            $("#searchButton").click(
+                function () {
+                    window.varlorABuscar = $("#searchterm").val();
+                    window.currentPage = 0;
+                    $('#containerEventos').empty();
+                    searchPage();
+
+                }
+            )
+        }
+    )
+</script>
+</body>
+</html>

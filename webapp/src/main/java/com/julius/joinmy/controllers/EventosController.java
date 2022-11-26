@@ -1,8 +1,11 @@
 package com.julius.joinmy.controllers;
 
 import com.julius.joinmy.dtos.EventoDTO;
+import com.julius.joinmy.dtos.FilterDTO;
 import com.julius.joinmy.helpers.ConverterHelper;
+import com.julius.joinmy.helpers.PageRender;
 import com.julius.joinmy.services.IEventosService;
+import jdk.jfr.ContentType;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,12 +25,13 @@ public class EventosController {
     private ModelMapper mapper;
 
     @RequestMapping(method = RequestMethod.GET, path = "eventos")
-    public String getEventos(@RequestParam(defaultValue = "0") int page, Model model) {
+    public String getEventos(@RequestParam(defaultValue = "0") int pagina, Model model) {
 
         List<EventoDTO> eventosDTOs = (List<EventoDTO>) ConverterHelper.convertList(eventosService.findAll(), EventoDTO.class, mapper);
+        PageRender<EventoDTO> pageRender = eventosService.findAll(pagina);
         //List<EventoDTO> eventosDTOs = eventosService.findAll().stream().map(evento -> mapper.map(evento, EventoDTO.class)).collect(Collectors.toList());
 
-        model.addAttribute("eventos", eventosDTOs);
+        model.addAttribute("pageRender", pageRender);
         return "eventos";
     }
 
@@ -67,6 +71,13 @@ public class EventosController {
         eventosService.save(eventoDTO);
         flash.addFlashAttribute("success", "Cliente creado con exito");
         return "redirect:/eventos";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/eventos/res", produces = { "application/json", "application/xml" })
+    public List<EventoDTO> eventosRes(FilterDTO filter) {
+        System.out.println(filter);
+        return eventosService.findAllByFilter(filter);
     }
 
     @Autowired

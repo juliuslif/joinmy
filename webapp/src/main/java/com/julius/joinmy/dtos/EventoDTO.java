@@ -1,8 +1,10 @@
 package com.julius.joinmy.dtos;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.List;
 
 public class EventoDTO {
 
@@ -18,6 +20,13 @@ public class EventoDTO {
 
     //@DateTimeFormat(pattern = "MM-dd-yyyy' at' HH:mm:ss")
     private Date dateFinal;
+
+    @Range(min = 3, max = 1000)
+    private Integer maxNumOfPersons;
+
+    private List<UsuarioDTO> subscriptores;
+
+    private UsuarioDTO userAdmin;
 
     public Long getId() {
         return id;
@@ -65,5 +74,29 @@ public class EventoDTO {
 
     public void setDateFinal(Date dateFinal) {
         this.dateFinal = dateFinal;
+    }
+
+    public Integer getMaxNumOfPersons() {
+        return maxNumOfPersons;
+    }
+
+    public void setMaxNumOfPersons(Integer maxNumOfPersons) {
+        this.maxNumOfPersons = maxNumOfPersons;
+    }
+
+    public List<UsuarioDTO> getSubscriptores() {
+        return subscriptores;
+    }
+
+    public void setSubscriptores(List<UsuarioDTO> subscriptores) {
+        this.subscriptores = subscriptores;
+    }
+
+    public UsuarioDTO getUserAdmin() {
+        return userAdmin;
+    }
+
+    public void setUserAdmin(UsuarioDTO userAdmin) {
+        this.userAdmin = userAdmin;
     }
 }

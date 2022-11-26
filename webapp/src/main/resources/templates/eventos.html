@@ -5,12 +5,19 @@
 <body>
 <header th:replace="layout/layout :: header"></header>
 <div class="container py-4">
+    <div class="field" id="searchform">
+        <input type="text" id="searchterm" placeholder="what are you searching for?" />
+        <button type="button" id="searchButton">Find!</button>
+    </div>
     <div class="card bg-light">
         <div class="card-header">Listado de eventos</div>
         <div class="card-body"></div>
         <div class="container">
             <h4 class="card-title"></h4>
             <a th:href="@{/addEvento}" class="btn btn-primary btn-xs">Crear Evento</a>
+            <div th:if="${pageRender.previusPage}"><a th:href="@{/eventos(page=${pageRender.getPaginaActual()-1})}">Pagina Anterior</a></div>
+            <div th:if="${pageRender.nextPage}"><a th:href="@{/eventos(page=${pageRender.getPaginaActual()+1})}">Pagina Siguiente</a> </div>
+
             <table>
                 <thead>
                 <tr>
@@ -23,7 +30,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="evento: ${eventos}">
+                <tr th:each="evento: ${pageRender.getPage()}">
                     <td th:text="${evento.id}"></td>
                     <td th:text="${evento.titulo}"></td>
                     <td th:text="${evento.descripcion}"></td>
@@ -35,8 +42,14 @@
                 </tbody>
             </table>
         </div>
+        <div id="containerEventos">
+
+        </div>
     </div>
 </div>
+<p id="prueba"></p>
 <footer th:replace="layout/layout :: footer"></footer>
+<div th:replace="js/paginacion-eventos :: javascript"></div>
+
 </body>
 </html>
