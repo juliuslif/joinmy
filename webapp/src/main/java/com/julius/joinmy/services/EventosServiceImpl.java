@@ -48,6 +48,12 @@ public class EventosServiceImpl implements IEventosService {
     @Override
     public List<EventoDTO> findAllByFilter(FilterDTO filter) {
         Pageable pageRequest = PageRequest.of(filter.getPagina(), 8);
+        if (filter.getFechaInicio()!= null) {
+
+        }
+        if (filter.getFechaFinal()!= null) {
+
+        }
         List<Evento> lista = eventoDao.findByTituloLikeIgnoreCaseOrDescripcionLikeIgnoreCase("%" + filter.getBusqueda() + "%", "%" + filter.getBusqueda() + "%" , pageRequest);
         List<EventoDTO> content = (List<EventoDTO>) ConverterHelper.convertList( lista, EventoDTO.class, mapper);
         return content;

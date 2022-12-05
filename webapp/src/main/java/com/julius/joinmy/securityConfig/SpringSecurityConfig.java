@@ -3,7 +3,6 @@ package com.julius.joinmy.securityConfig;
 import com.julius.joinmy.services.JpaUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -37,7 +36,9 @@ public class SpringSecurityConfig{
                 //.hasAnyRole("USER", "ADMIN")
                 .anyRequest()
                 .authenticated()
-                .and().logout();
+                .and().formLogin().loginPage("/login").permitAll()
+                .and().logout().
+                and().exceptionHandling().accessDeniedPage("/error_403");
                 //.and()
                 //.httpBasic();
 

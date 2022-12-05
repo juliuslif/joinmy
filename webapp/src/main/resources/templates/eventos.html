@@ -4,49 +4,114 @@
 </head>
 <body>
 <header th:replace="layout/layout :: header"></header>
-<div class="container py-4">
-    <div class="field" id="searchform">
-        <input type="text" id="searchterm" placeholder="what are you searching for?" />
-        <button type="button" id="searchButton">Find!</button>
-    </div>
-    <div class="card bg-light">
-        <div class="card-header">Listado de eventos</div>
-        <div class="card-body"></div>
-        <div class="container">
-            <h4 class="card-title"></h4>
-            <a th:href="@{/addEvento}" class="btn btn-primary btn-xs">Crear Evento</a>
-            <div th:if="${pageRender.previusPage}"><a th:href="@{/eventos(page=${pageRender.getPaginaActual()-1})}">Pagina Anterior</a></div>
-            <div th:if="${pageRender.nextPage}"><a th:href="@{/eventos(page=${pageRender.getPaginaActual()+1})}">Pagina Siguiente</a> </div>
 
-            <table>
-                <thead>
-                <tr>
-                    <td>id</td>
-                    <td>titulo</td>
-                    <td>descripcion</td>
-                    <td>fecha comienzo evento</td>
-                    <td>fecha finalizacion evento</td>
-                    <th>editar</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="evento: ${pageRender.getPage()}">
-                    <td th:text="${evento.id}"></td>
-                    <td th:text="${evento.titulo}"></td>
-                    <td th:text="${evento.descripcion}"></td>
-                    <td th:text="${evento.date}"></td>
-                    <td th:text="${evento.dateFinal}"></td>
-                    <td><a th:href="@{/evento/} + ${evento.id}" th:text="editar" class="btn btn-primary btn-xs"></a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                <a class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <span class="fs-5 d-none d-sm-inline">Filtros</span>
+                </a>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                    <li class="nav-item">
+                        <div>
+                            <input type="text" placeholder="Search"/>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="row mt-3">
+                            <div>
+                                <input class="form-check-input mt-0" id="checkInicio" type="checkbox" value="" aria-label="Checkbox for following text input">
+                                <span>Fecha inicio</span>
+                            </div>
+                            <div class="col" style="display: none" id="div-start-date">
+                                <input type="datetime-local" id="start-date" name="start-date">
+                            </div>
+                            <div>
+                                <input class="form-check-input mt-0" type="checkbox" id="checkFinal"  value="" aria-label="Checkbox for following text input">
+                                <span>Fecha Fin</span>
+                            </div>
+                            <div class="col" style="display: none" id="div-final-date">
+                                <input type="datetime-local" id="end-date" name="end-date" >
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item ">
+                        <div>
+                            <span>Con plazas libres</span>
+                            <input id="checkPlazasLibres" class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link align-middle px-0">
+                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link align-middle px-0">
+                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span> </a>
+                    </li>
+                </ul>
+                <hr>
+            </div>
         </div>
-        <div id="containerEventos">
+        <div class="col py-3">
+            <div class="field" id="searchform">
+                <input type="text" id="searchterm" placeholder="what are you searching for?"/>
+                <button type="button" id="searchButton">Find!</button>
+            </div>
+            <div class="card bg-light">
+                <div class="card-header">Listado de eventos</div>
+                <div class="card-body"></div>
+                <div class="container">
+                    <h4 class="card-title"></h4>
+                    <a th:href="@{/addEvento}" class="btn btn-primary btn-xs">Crear Evento</a>
+                    <div th:if="${pageRender.previusPage}"><a
+                            th:href="@{/eventos(page=${pageRender.getPaginaActual()-1})}">Pagina
+                        Anterior</a></div>
+                    <div th:if="${pageRender.nextPage}"><a
+                            th:href="@{/eventos(page=${pageRender.getPaginaActual()+1})}">Pagina
+                        Siguiente</a></div>
 
+                    <table>
+                        <thead>
+                        <tr>
+                            <td>id</td>
+                            <td>titulo</td>
+                            <td>descripcion</td>
+                            <td>fecha comienzo evento</td>
+                            <td>fecha finalizacion evento</td>
+                            <th>editar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="evento: ${pageRender.getPage()}">
+                            <td th:text="${evento.id}"></td>
+                            <td th:text="${evento.titulo}"></td>
+                            <td th:text="${evento.descripcion}"></td>
+                            <td th:text="${evento.date}"></td>
+                            <td th:text="${evento.dateFinal}"></td>
+                            <td><a th:href="@{/evento/} + ${evento.id}" th:text="editar"
+                                   class="btn btn-primary btn-xs"></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="containerEventos">
+
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+
 <p id="prueba"></p>
 <footer th:replace="layout/layout :: footer"></footer>
 <div th:replace="js/paginacion-eventos :: javascript"></div>
