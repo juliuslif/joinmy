@@ -40,6 +40,8 @@ public class SpringSecurityConfig{
                 .and().logout().
                 and().exceptionHandling().accessDeniedPage("/error_403");
                 //.and()
+                //.csrf().disable();
+                //.and()
                 //.httpBasic();
 
         return http.build();

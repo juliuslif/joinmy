@@ -15,7 +15,7 @@
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                     <li class="nav-item">
                         <div>
-                            <input type="text" placeholder="Search"/>
+                            <input type="text" id="searchterm" placeholder="Search"/>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -43,9 +43,7 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link align-middle px-0">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
-                        </a>
+                        <button id="searchButton" class="btn btn-light">Buscar</button>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link align-middle px-0">
@@ -61,47 +59,13 @@
             </div>
         </div>
         <div class="col py-3">
-            <div class="field" id="searchform">
-                <input type="text" id="searchterm" placeholder="what are you searching for?"/>
-                <button type="button" id="searchButton">Find!</button>
-            </div>
             <div class="card bg-light">
                 <div class="card-header">Listado de eventos</div>
                 <div class="card-body"></div>
                 <div class="container">
                     <h4 class="card-title"></h4>
                     <a th:href="@{/addEvento}" class="btn btn-primary btn-xs">Crear Evento</a>
-                    <div th:if="${pageRender.previusPage}"><a
-                            th:href="@{/eventos(page=${pageRender.getPaginaActual()-1})}">Pagina
-                        Anterior</a></div>
-                    <div th:if="${pageRender.nextPage}"><a
-                            th:href="@{/eventos(page=${pageRender.getPaginaActual()+1})}">Pagina
-                        Siguiente</a></div>
 
-                    <table>
-                        <thead>
-                        <tr>
-                            <td>id</td>
-                            <td>titulo</td>
-                            <td>descripcion</td>
-                            <td>fecha comienzo evento</td>
-                            <td>fecha finalizacion evento</td>
-                            <th>editar</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="evento: ${pageRender.getPage()}">
-                            <td th:text="${evento.id}"></td>
-                            <td th:text="${evento.titulo}"></td>
-                            <td th:text="${evento.descripcion}"></td>
-                            <td th:text="${evento.date}"></td>
-                            <td th:text="${evento.dateFinal}"></td>
-                            <td><a th:href="@{/evento/} + ${evento.id}" th:text="editar"
-                                   class="btn btn-primary btn-xs"></a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
                 </div>
                 <div id="containerEventos">
 

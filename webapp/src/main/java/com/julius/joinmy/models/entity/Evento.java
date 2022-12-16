@@ -3,7 +3,7 @@ package com.julius.joinmy.models.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Eventos")
@@ -16,6 +16,8 @@ public class Evento implements Serializable {
     private String titulo;
 
     private String descripcion;
+
+    private String descripcionCorta;
 
     @Column(name = "max_persons", nullable = false)
     private Integer maxNumOfPersons;
@@ -38,7 +40,7 @@ public class Evento implements Serializable {
     private Usuario userAdmin;
 
     @ManyToMany(mappedBy = "eventosSubscriber", fetch = FetchType.LAZY)
-    private List<Usuario> subscriptores;
+    private Set<Usuario> subscriptores;
 
     @PrePersist
     public void prePersist() {
@@ -109,11 +111,19 @@ public class Evento implements Serializable {
         this.userAdmin = userAdmin;
     }
 
-    public List<Usuario> getSubscriptores() {
+    public Set<Usuario> getSubscriptores() {
         return subscriptores;
     }
 
-    public void setSubscriptores(List<Usuario> subscriptores) {
+    public void setSubscriptores(Set<Usuario> subscriptores) {
         this.subscriptores = subscriptores;
+    }
+
+    public String getDescripcionCorta() {
+        return descripcionCorta;
+    }
+
+    public void setDescripcionCorta(String descripcionCorta) {
+        this.descripcionCorta = descripcionCorta;
     }
 }

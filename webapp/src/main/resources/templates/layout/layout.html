@@ -5,7 +5,6 @@
     <title th:text="${titulo}">Title</title>
     <link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}">
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/css/barrabusqueda.css}">
 
     <script th:src="@{/js/jquery-3.6.1.min.js}"></script>
     <script th:src="@{/js/jquery-ui.min.js}"></script>
@@ -33,14 +32,17 @@
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/eventos}">Eventos</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Mis eventos</a>
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a class="nav-link  disabled" href="#">Mis eventos</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Subscripciones</a>
+                    <li sec:authorize="isAuthenticated()" class="nav-item">
+                        <a class="nav-link" th:href="@{/mieventos}">Mis eventos</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled">disabled</a>
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a class="nav-link disabled" href="#">Subscripciones</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" class="nav-item">
+                        <a class="nav-link" th:href="@{/misubs}">Subscripciones</a>
                     </li>
                 </ul>
             </div>
@@ -77,8 +79,58 @@
     <div class="alert alert-warning" th:if="${warning!=null}" th:text="${warning}"></div>
     <div class="alert alert-info" th:if="${info!=null}" th:text="${info}"></div>
 </header>
-<div class="container">
-
+<div th:fragment="filter">
+    <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+            <a class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <span class="fs-5 d-none d-sm-inline">Filtros</span>
+            </a>
+            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                <li class="nav-item">
+                    <div>
+                        <input type="text" id="searchterm" placeholder="Search"/>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="row mt-3">
+                        <div>
+                            <input class="form-check-input mt-0" id="checkInicio" type="checkbox" value="" aria-label="Checkbox for following text input">
+                            <span>Fecha inicio</span>
+                        </div>
+                        <div class="col" style="display: none" id="div-start-date">
+                            <input type="datetime-local" id="start-date" name="start-date">
+                        </div>
+                        <div>
+                            <input class="form-check-input mt-0" type="checkbox" id="checkFinal"  value="" aria-label="Checkbox for following text input">
+                            <span>Fecha Fin</span>
+                        </div>
+                        <div class="col" style="display: none" id="div-final-date">
+                            <input type="datetime-local" id="end-date" name="end-date" >
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item ">
+                    <div>
+                        <span>Con plazas libres</span>
+                        <input id="checkPlazasLibres" class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <button id="searchButton" class="btn btn-light">Buscar</button>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link align-middle px-0">
+                        <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link px-0 align-middle">
+                        <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span> </a>
+                </li>
+            </ul>
+            <hr>
+        </div>
+    </div>
 </div>
 
 <footer th:fragment="footer" class="container">

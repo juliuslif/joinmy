@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head">
+</head>
+<body>
+<header th:replace="layout/layout :: header"></header>
+
+
+<div class="container">
+    <img src="" alt="imgForEvent">
+    <div>
+        <p th:text="${evento.dateFormated}"></p>
+    </div>
+    <div>
+        <h1 class="" th:text="${evento.titulo}"></h1>
+    </div>
+    <div>
+        <p class="" th:text="${evento.descripcionCorta}"></p>
+    </div>
+    <div>
+        <p>By <span th:text="${evento.userAdmin.username}"></span></p>
+    </div>
+    <div>
+        <h4>Cuando y donde</h4>
+    </div>
+    <div>
+        <div class="d-flex flex-row">
+            <div class="d-flex flex-row me-5">
+                <img src="">
+                <div>
+                    <p><strong>Date and Time</strong></p>
+                    <p th:text="${evento.date}"></p>
+                </div>
+            </div>
+            <div class="d-flex flex-row ms-5">
+                <img src="">
+                <div>
+                    <p><strong>Localizacion</strong></p>
+                    <p>Localizacion</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <h4>Sobre el evento:</h4>
+    </div>
+    <div>
+        <p th:text="${evento.descripcion}"></p>
+    </div>
+    <div th:text="'Plazas libres :' + ${evento.getMaxNumOfPersons() - evento.getSubscriptores().size()}"></div>
+    <!--<button id="buttonSubscribir" th:if="${(evento.getMaxNumOfPersons() - evento.getSubscriptores().size()>0) && !evento.userSubscrito}">Subscribirse</button>-->
+    <!--<button id="buttonDesubscribir" th:if="${evento.userSubscrito}">Desubscribirse</button>-->
+    <form id="subscribirseForm" th:action="@{/subscribirse}" method="post" th:if="${(evento.getMaxNumOfPersons() - evento.getSubscriptores().size()>0) && !evento.userSubscrito}">
+        <!--<button id="buttonSubscribir" >Subscribirse</button>-->
+        <button onclick="function f() {
+                                document.getElementById('subscribirseForm').submit();
+                            }" type="submit">Subscribirse</button>
+        <input type="hidden" th:name="eventoId" th:value="${evento.id}">
+        <input type="hidden" th:name="subscribe" th:value="true">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    </form>
+    <form id="dessubscribirseForm" th:action="@{/subscribirse}" method="post" th:if="${evento.userSubscrito}">
+        <button onclick="function f() {
+                                document.getElementById('dessubscribirseForm').submit();
+                            }" type="submit">Desubscribirse</button>
+        <input type="hidden" th:name="eventoId" th:value="${evento.id}">
+        <input type="hidden" th:name="subscribe" th:value="false">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    </form>
+
+</div>
+
+<footer th:replace="layout/layout :: footer"></footer>
+<div th:replace="js/paginacion-eventos :: printDate"></div>
+</body>
+</html>

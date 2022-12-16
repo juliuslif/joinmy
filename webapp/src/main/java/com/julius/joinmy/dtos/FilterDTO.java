@@ -11,6 +11,7 @@ public class FilterDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date fechaInicio;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date fechaFinal;
 
     private Boolean isPlazaLibre;

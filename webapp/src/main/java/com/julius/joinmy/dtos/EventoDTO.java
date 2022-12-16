@@ -14,9 +14,13 @@ public class EventoDTO {
     @NotBlank
     private String descripcion;
 
+    private String descripcionCorta;
+
     private Date createAt;
     //@DateTimeFormat(pattern = "MM-dd-yyyy' at' HH:mm:ss")
     private Date date;
+
+    private String dateFormated;
 
     //@DateTimeFormat(pattern = "MM-dd-yyyy' at' HH:mm:ss")
     private Date dateFinal;
@@ -27,6 +31,8 @@ public class EventoDTO {
     private List<UsuarioDTO> subscriptores;
 
     private UsuarioDTO userAdmin;
+
+    private Boolean isUserSubscrito;
 
     public Long getId() {
         return id;
@@ -98,5 +104,29 @@ public class EventoDTO {
 
     public void setUserAdmin(UsuarioDTO userAdmin) {
         this.userAdmin = userAdmin;
+    }
+
+    public String getDateFormated() {
+        return dateFormated;
+    }
+
+    public void setDateFormated(String dateFormated) {
+        this.dateFormated = dateFormated;
+    }
+
+    public String getDescripcionCorta() {
+        return descripcionCorta;
+    }
+
+    public void setDescripcionCorta(String descripcionCorta) {
+        this.descripcionCorta = descripcionCorta;
+    }
+
+    public Boolean getUserSubscrito() {
+        return isUserSubscrito;
+    }
+
+    public void setUserSubscrito(Boolean userSubscrito) {
+        isUserSubscrito = userSubscrito;
     }
 }

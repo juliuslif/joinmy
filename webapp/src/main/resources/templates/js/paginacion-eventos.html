@@ -9,7 +9,8 @@
     window.fechaFinal= "";
     window.isPlazaLibre = false;
 
-    window.direccion = '/eventos/res';
+    window.direccion = window.location.href + '/res';
+    console.log(window.direccion);
     function scrollEvent() {
         if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
             searchPage();
@@ -17,16 +18,23 @@
     }
 
     function searchPage() {
-        var direccion = '/eventos/res';
-        let datos = { pagina: window.currentPage, busqueda : window.varlorABuscar, isPlazaLibre: window.isPlazaLibre };
-        if (window.fechaInicio.length !== 0) {
-            datos.fechaInicio = window.fechaInicio;
-            console.log(datos.fechaInicio);
+
+        let datos = {pagina: window.currentPage};
+        let valorBuscar = $("#searchterm").val()
+        if (valorBuscar !== "") {
+            datos.busqueda = valorBuscar;
         }
-        if (window.fechaFinal.length !== 0) {
-            datos.fechaFinal = window.fechaFinal;
-            console.log(datos.fechaFinal);
+        let checkInicio = $('#checkInicio');
+
+        if (checkInicio.prop('checked')) {
+            datos.fechaInicio = $("#start-date").val();
         }
+        let checkFinal = $('#checkFinal');
+        if (checkFinal.prop('checked')) {
+            datos.fechaFinal = $("#end-date").val();
+        }
+        datos.plazaLibre = $("#checkPlazasLibres").prop('checked');
+
 
         $.ajax({
             beforeSend: function () {
@@ -82,7 +90,7 @@
                 }
             })
 
-            searchPage("");
+            searchPage();
 
             $(window).scroll(function() {
                 scrollEvent;
@@ -90,28 +98,92 @@
 
             $("#searchButton").click(
                 function () {
-                    window.varlorABuscar = $("#searchterm").val();
-                    if(checkInicio.prop('checked')){
-                        window.fechaInicio = $("#start-date").val();
-                    }else {
-                        window.fechaInicio = "";
-                    }
-                    checkFinal.click(function () {
-                        if(checkFinal.prop('checked')){
-                            window.fechaFinal = $("#end-date").val();
-                        }else {
-                            window.fechaFinal = "";
-                        }
-                    })
-                    window.isPlazaLibre = $("#checkPlazasLibres").prop('checked');
                     window.currentPage = 0;
                     $('#containerEventos').empty();
                     searchPage();
-
                 }
             )
         }
     )
 </script>
+<script type="text/javascript" th:fragment="clickEvents">
+    function clickEvent(id) {
+        window.location = "/evento/" + id;
+    }
+</script>
+<script type="text/javascript" th:fragment="printDate">
+    function printDate(date) {
+        let date2 = Date.parse(date);
+        console.log(date2);
+    }
+</script>
+<!--<script type="text/javascript" th:fragment="subscripcion">
+
+
+    $(document).ready(
+        function () {
+            let buttonSubscribirse = $('#buttonSubscribir');
+            let buttonDesSubscribirse = $('#buttonDesubscribir');
+
+
+            let direccion = window.location.href;
+            let ultimaPosicion = direccion.lastIndexOf('/') +1;
+            let identificadorEvento = direccion.slice(ultimaPosicion, direccion.length);
+            let subscribeDireccion = (window.location.origin + '/subscribirse/');
+
+            console.log(subscribeDireccion);
+
+            buttonSubscribirse.click(
+                function () {
+                    $.ajax({
+                        beforeSend: function () {
+                            //cargando
+                        },
+                        url:  subscribeDireccion,
+                        method: 'post',
+                        data: {subscribe : true, eventoId : identificadorEvento},
+                        success: function () {
+                            alert('Se ha subscrito correctamente.')
+                            buttonSubscribirse.hide();
+                            buttonDesSubscribirse.show();
+                        },
+                        error: function (jqXHR, estado, error) {
+                            console.log(estado);
+                            console.log(error);
+                        },
+                        complete: function (jqXHR, estado) {
+
+                        }
+                    })
+                }
+            );
+            buttonDesSubscribirse.click(
+                function () {
+                    $.ajax({
+                        beforeSend: function () {
+                            //cargando
+                        },
+                        url:  (window.location.origin + '/subscribirse/' + identificadorEvento),
+                        method: 'post',
+                        data: {subscribe : false, eventoId: identificadorEvento},
+                        success: function () {
+                            alert('Se ha dessubscrito correctamente.')
+                            buttonDesSubscribirse.hide();
+                            buttonSubscribirse.show();
+                        },
+                        error: function (jqXHR, estado, error) {
+                            console.log(estado);
+                            console.log(error);
+                        },
+                        complete: function (jqXHR, estado) {
+
+                        }
+                    })
+                }
+            );
+        }
+    )
+
+</script>-->
 </body>
 </html>

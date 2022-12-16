@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuarios")
@@ -29,12 +30,22 @@ public class Usuario implements Serializable {
     @OneToMany(mappedBy = "userAdmin",cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     List<Evento> eventosAdmin;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "subscription",
             joinColumns = { @JoinColumn(name = "fk_usuario") },
             inverseJoinColumns = { @JoinColumn(name = "fk_evento") })
-    List<Evento> eventosSubscriber;
+    Set<Evento> eventosSubscriber;
 
+    public void addEventoSub(Evento evento) {
+        eventosSubscriber.add(evento);
+        evento.getSubscriptores().add(this);
+    }
+
+    public void removeEventoSub(Evento evento) {
+        evento.getSubscriptores().remove(this);
+        eventosSubscriber.remove(evento);
+
+    }
 
     public Long getId() {
         return id;
@@ -76,11 +87,11 @@ public class Usuario implements Serializable {
         this.eventosAdmin = eventosAdmin;
     }
 
-    public List<Evento> getEventosSubscriber() {
+    public Set<Evento> getEventosSubscriber() {
         return eventosSubscriber;
     }
 
-    public void setEventosSubscriber(List<Evento> eventosSubscriber) {
+    public void setEventosSubscriber(Set<Evento> eventosSubscriber) {
         this.eventosSubscriber = eventosSubscriber;
     }
 
