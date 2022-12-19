@@ -1,4 +1,5 @@
 package com.julius.joinmy.dtos;
+import com.julius.joinmy.models.entity.embedeable.Localizacion;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,19 +15,23 @@ public class EventoDTO {
     @NotBlank
     private String descripcion;
 
+    @NotBlank
     private String descripcionCorta;
 
+
     private Date createAt;
-    //@DateTimeFormat(pattern = "MM-dd-yyyy' at' HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date date;
 
     private String dateFormated;
 
-    //@DateTimeFormat(pattern = "MM-dd-yyyy' at' HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date dateFinal;
 
     @Range(min = 3, max = 1000)
     private Integer maxNumOfPersons;
+
+    private LocalizacionDTO localizacion;
 
     private List<UsuarioDTO> subscriptores;
 
@@ -128,5 +133,32 @@ public class EventoDTO {
 
     public void setUserSubscrito(Boolean userSubscrito) {
         isUserSubscrito = userSubscrito;
+    }
+
+    public LocalizacionDTO getLocalizacion() {
+        return localizacion;
+    }
+
+    public void setLocalizacion(LocalizacionDTO localizacion) {
+        this.localizacion = localizacion;
+    }
+
+    @Override
+    public String toString() {
+        return "EventoDTO{" +
+                "id=" + id +
+                ", titulo='" + titulo + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", descripcionCorta='" + descripcionCorta + '\'' +
+                ", createAt=" + createAt +
+                ", date=" + date +
+                ", dateFormated='" + dateFormated + '\'' +
+                ", dateFinal=" + dateFinal +
+                ", maxNumOfPersons=" + maxNumOfPersons +
+                ", localizacion=" + localizacion +
+                ", subscriptores=" + subscriptores +
+                ", userAdmin=" + userAdmin +
+                ", isUserSubscrito=" + isUserSubscrito +
+                '}';
     }
 }

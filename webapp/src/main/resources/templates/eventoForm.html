@@ -23,12 +23,32 @@
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Descripcion</label>
-                    <div class="col-sm-6">
-                        <input class="form-control" th:field="*{descripcion}" type="text"
+                    <label class="col-sm-2 col-form-label">Descripcion Corta</label>
+                    <div class="col">
+                        <input class="form-control" th:field="*{descripcionCorta}" type="text"
                                th:errorclass="'form-control alert-danger'"/>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('descripcionCorta')}"
+                               th:errors="*{descripcionCorta}"></small>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Descripcion</label>
+                    <div class="col">
+                        <textarea class="form-control" th:field="*{descripcion}" type="text"
+                               th:errorclass="'form-control alert-danger'"></textarea>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('descripcion')}"
                                th:errors="*{descripcion}"></small>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Localizacion</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" th:field="*{localizacion.localizacion}" type="text"
+                                  th:errorclass="'form-control alert-danger'">
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('localizacion')}"
+                               th:errors="*{localizacion.localizacion}"></small>
                     </div>
                 </div>
 
@@ -46,7 +66,7 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Fecha de ejecucion</label>
                     <div class="col-sm-6">
-                        <input class="form-control" th:field="*{date}" type="text"
+                        <input class="form-control" th:field="*{date}" type="datetime-local"
                                th:errorclass="'form-control alert-danger'"/>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('date')}"
                                th:errors="*{date}"></small>
@@ -56,11 +76,17 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Fecha de finalizacion</label>
                     <div class="col-sm-6">
-                        <input class="form-control" th:field="*{dateFinal}" type="text"
+                        <input class="form-control" th:field="*{dateFinal}" type="datetime-local"
                                th:errorclass="'form-control alert-danger'"/>
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('dateFinal')}"
                                th:errors="*{dateFinal}"></small>
                     </div>
+                </div>
+                <input type="hidden" th:name="localizacion.latitud" th:value="${evento.localizacion.latitud}" id="inputLatitud">
+                <input type="hidden" th:name="localizacion.longitud" th:value="${evento.localizacion.longitud}" id="inputLongitud">
+
+                <div id="containerMap">
+                    <div id="map"></div>
                 </div>
 
                 <input type="hidden" th:field="*{id}">
@@ -92,5 +118,9 @@
     </div>
 </div>
 <footer th:replace="layout/layout :: footer"></footer>
+<div th:replace="js/paginacion-eventos :: verMapaForm"></div>
+<script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBnh0qeaoSAEuThu-CCP6tHgFuVv6MQRr4&libraries=places&callback=initMap">
+</script>
 </body>
 </html>

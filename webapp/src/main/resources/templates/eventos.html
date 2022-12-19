@@ -19,6 +19,11 @@
                         </div>
                     </li>
                     <li class="nav-item">
+                        <div>
+                            <input type="text" id="localizacion" placeholder="ciudad/provincia"/>
+                        </div>
+                    </li>
+                    <li class="nav-item">
                         <div class="row mt-3">
                             <div>
                                 <input class="form-check-input mt-0" id="checkInicio" type="checkbox" value="" aria-label="Checkbox for following text input">
@@ -43,16 +48,16 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <button id="searchButton" class="btn btn-light">Buscar</button>
+                        <div>
+                            <input id="checkLocalizacionRadio" class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
+                            <span>mi localizacion</span>
+                        </div>
+                        <div class="col"  id="div-localizacionRadio" style="display: none">
+                            <input type="text" id="localizacionRadio" name="localizacionRadio" placeholder="Radio">
+                        </div>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link align-middle px-0">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span> </a>
+                        <button id="searchButton" class="btn btn-light">Buscar</button>
                     </li>
                 </ul>
                 <hr>
@@ -62,11 +67,6 @@
             <div class="card bg-light">
                 <div class="card-header">Listado de eventos</div>
                 <div class="card-body"></div>
-                <div class="container">
-                    <h4 class="card-title"></h4>
-                    <a th:href="@{/addEvento}" class="btn btn-primary btn-xs">Crear Evento</a>
-
-                </div>
                 <div id="containerEventos">
 
                 </div>

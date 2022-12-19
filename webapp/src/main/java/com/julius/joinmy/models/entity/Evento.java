@@ -1,5 +1,7 @@
 package com.julius.joinmy.models.entity;
 
+import com.julius.joinmy.models.entity.embedeable.Localizacion;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -12,9 +14,20 @@ public class Evento implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "titulo")
+    @Column(name = "titulo", nullable = false)
     private String titulo;
 
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride( name = "localizacion", column = @Column(name = "localizacion")),
+            @AttributeOverride( name = "longitud", column = @Column(name = "localizacion_longitud")),
+            @AttributeOverride( name = "latitud", column = @Column(name = "localizacion_latitud"))
+    })
+    private Localizacion localizacion;
+
+    @Column(nullable = false)
+    @Lob
     private String descripcion;
 
     private String descripcionCorta;
@@ -125,5 +138,13 @@ public class Evento implements Serializable {
 
     public void setDescripcionCorta(String descripcionCorta) {
         this.descripcionCorta = descripcionCorta;
+    }
+
+    public Localizacion getLocalizacion() {
+        return localizacion;
+    }
+
+    public void setLocalizacion(Localizacion localizacion) {
+        this.localizacion = localizacion;
     }
 }

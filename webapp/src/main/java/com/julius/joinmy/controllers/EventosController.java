@@ -1,5 +1,6 @@
 package com.julius.joinmy.controllers;
 
+import com.julius.joinmy.Validators.EventoDToValidator;
 import com.julius.joinmy.dtos.EventoDTO;
 import com.julius.joinmy.dtos.FilterDTO;
 import com.julius.joinmy.dtos.SubscribeDTO;
@@ -12,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -41,7 +43,7 @@ public class EventosController {
     }
 
     @RequestMapping(value = "/evento/{id}")
-    public String editEventoForm(@PathVariable Long id, Model model, RedirectAttributes flash, Authentication authentication) {
+    public String viewEvent(@PathVariable Long id, Model model, RedirectAttributes flash, Authentication authentication) {
         EventoDTO eventoDTO;
         if(id>0) {
             eventoDTO = eventosService.findOne(id);
@@ -52,6 +54,13 @@ public class EventosController {
         } else {
             flash.addFlashAttribute("error", "EL id tiene que ser mayor a 0");
             return "redirect:/eventos";
+        }
+
+        boolean propietario = eventoDTO.getUserAdmin().getUsername().equals(authentication.getName());
+
+        if (propietario) {
+            model.addAttribute("evento", eventoDTO);
+            return "eventoForm";
         }
 
         String pattern = "MMMM dd";
@@ -121,6 +130,11 @@ public class EventosController {
 
         flash.addFlashAttribute("success",(subscribe.getSubscribe())? "subscrito correctamente": "desubscrito correctamente");
         return "redirect:/evento/".concat(subscribe.getEventoId().toString());
+    }
+
+    @InitBinder
+    public void init(WebDataBinder binder) {
+
     }
 
     @Autowired

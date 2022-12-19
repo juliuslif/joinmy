@@ -14,6 +14,13 @@ public class FilterDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date fechaFinal;
 
+    private String localizacion;
+
+    private Double longitud;
+
+    private Double latitud;
+
+    private Double radio;
     private Boolean isPlazaLibre;
 
     public int getPagina() {
@@ -56,6 +63,38 @@ public class FilterDTO {
         isPlazaLibre = plazaLibre;
     }
 
+    public String getLocalizacion() {
+        return localizacion;
+    }
+
+    public void setLocalizacion(String localizacion) {
+        this.localizacion = localizacion;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
+    }
+
+    public Double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
+    }
+
+    public Double getRadio() {
+        return radio;
+    }
+
+    public void setRadio(Double radio) {
+        this.radio = radio;
+    }
+
     @Override
     public String toString() {
         return "FilterDTO{" +
@@ -63,6 +102,10 @@ public class FilterDTO {
                 ", busqueda='" + busqueda + '\'' +
                 ", fechaInicio=" + fechaInicio +
                 ", fechaFinal=" + fechaFinal +
+                ", localizacion='" + localizacion + '\'' +
+                ", longitud=" + longitud +
+                ", latitud=" + latitud +
+                ", radio=" + radio +
                 ", isPlazaLibre=" + isPlazaLibre +
                 '}';
     }

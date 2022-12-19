@@ -6,11 +6,16 @@
     window.currentPage = 0;
     window.varlorABuscar = "";
     window.fechaInicio = "";
-    window.fechaFinal= "";
+    window.fechaFinal = "";
     window.isPlazaLibre = false;
 
     window.direccion = window.location.href + '/res';
+
+    let latitud;
+    let longitud;
+
     console.log(window.direccion);
+
     function scrollEvent() {
         if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
             searchPage();
@@ -19,10 +24,16 @@
 
     function searchPage() {
 
+
         let datos = {pagina: window.currentPage};
         let valorBuscar = $("#searchterm").val()
         if (valorBuscar !== "") {
             datos.busqueda = valorBuscar;
+        }
+
+        let ciudad = $('#localizacion').val();
+        if (ciudad != null && ciudad !== "") {
+            datos.localizacion = ciudad;
         }
         let checkInicio = $('#checkInicio');
 
@@ -35,6 +46,15 @@
         }
         datos.plazaLibre = $("#checkPlazasLibres").prop('checked');
 
+        if ($('#checkLocalizacionRadio').prop('checked')) {
+            let localizacionRadio = $('#localizacionRadio');
+            if (localizacionRadio.val() != null && localizacionRadio.val() !== "" && !isNaN(localizacionRadio.val())) {
+                datos.longitud = longitud;
+                datos.latitud = latitud;
+                datos.radio = localizacionRadio.val();
+            }
+
+        }
 
         $.ajax({
             beforeSend: function () {
@@ -44,7 +64,7 @@
             method: 'get',
             data: datos,
             success: function (resp) {
-                if(resp.length ===0) {
+                if (resp.length === 0) {
                     $(window).off('scroll');
                 }else {
                     $(window).scroll(scrollEvent);
@@ -103,6 +123,32 @@
                     searchPage();
                 }
             )
+            let checkPropiaLocalizacion = $('#checkLocalizacionRadio');
+
+
+            checkPropiaLocalizacion.click(
+                function () {
+                    if (checkPropiaLocalizacion.prop('checked')) {
+
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(function (pos) {
+                                    longitud = pos.coords.longitude;
+                                    latitud = pos.coords.latitude;
+                                    $('#div-localizacionRadio').show();
+                                },
+                                function (error) {
+                                    alert('no se soporta la geolocalizacion');
+                                    checkPropiaLocalizacion.prop("checked", false);
+                                });
+
+                        }
+                    } else {
+                        $('#div-localizacionRadio').hide();
+                    }
+                }
+            )
+
+
         }
     )
 </script>
@@ -115,6 +161,81 @@
     function printDate(date) {
         let date2 = Date.parse(date);
         console.log(date2);
+    }
+</script>
+<script type="text/javascript" th:fragment="verMapa">
+
+    $(document).ready(
+        //initMap()
+    )
+
+    function initMap() {
+        let map;
+        let latitud = Number($('#inputLatitud').val());
+        let longitud = Number($('#inputLongitud').val());
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: {lat: latitud, lng:  longitud},
+            zoom: 12,
+        });
+        let marker;
+        marker = new google.maps.Marker({
+            position : {lat: latitud, lng:  longitud},
+            map
+        })
+        window.initMap = initMap;
+    }
+</script>
+<script type="text/javascript" th:fragment="verMapaForm">
+
+    $(document).ready(
+        //initMap()
+    )
+
+    function initMap() {
+        let map;
+        let latitud = Number($('#inputLatitud').val());
+        let longitud = Number($('#inputLongitud').val());
+        if(latitud==null || latitud === 0|| longitud==null || longitud ===0) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (pos) {
+                        longitud = pos.coords.longitude;
+                        latitud = pos.coords.latitude;
+                        map = new google.maps.Map(document.getElementById("map"), {
+                            center: {lat: latitud, lng:  longitud},
+                            zoom: 12,
+                        });
+                        let marker;
+                        marker = new google.maps.Marker({
+                            position : {lat: latitud, lng:  longitud},
+                            map,
+                            draggable: true
+                        })
+                        window.initMap = initMap;
+                    },
+                    function (error) {
+                        alert('no se soporta la geolocalizacion');
+                    });
+            }
+        }
+
+
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: {lat: latitud, lng:  longitud},
+            zoom: 12,
+        });
+        let marker;
+        marker = new google.maps.Marker({
+            position : {lat: latitud, lng:  longitud},
+            map,
+            draggable: true
+        })
+        google.maps.event.addListener(marker, 'dragend', function (evt) {
+            $('#inputLatitud').val(evt.latLng.lat().toFixed(3));
+            $('#inputLongitud').val(evt.latLng.lng().toFixed(3));
+        });
+
+        window.initMap = initMap;
+
     }
 </script>
 <!--<script type="text/javascript" th:fragment="subscripcion">
