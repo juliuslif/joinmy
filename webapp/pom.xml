@@ -12,6 +12,7 @@
     <url>http://maven.apache.org</url>
     <properties>
         <mainClass>JoinmyApplication</mainClass>
+        <java.version>11</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -79,7 +80,6 @@
     </dependencies>
 
     <build>
-
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
